@@ -20,11 +20,16 @@ jobs:
       run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
-    - name: Run code coverage (tarpaulin)
-      run: cargo tarpaulin --ignore-tests --verbose
-    - name: Run linting (clippy)
-      run: cargo clippy -- -D warnings --verbose
+    - name: Run code cavarage (tarpaulon)
+      uses: actions-rs/tarpaulin@v0.1
+      with: 
+        version: '0.15.0'
+        args: '-- --test-threads 1'
+    - name: Run linter (clippy)
+      run: cargo clippy -- -D warnings
     - name: Run formatting (fmt)
-      run: cargo fmt -- --check --verbose
-    - name: Run audit
-      run: cargo audit --verbose
+      run: cargo fmt -- --check
+    - name: Run audit check
+      uses: actions-rs/audit-check@v1.2.0
+      with:
+          token: ${{ secrets.GITHUB_TOKEN }}
